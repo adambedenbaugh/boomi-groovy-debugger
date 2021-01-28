@@ -33,9 +33,8 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
 
     String Data = is.getText()
 
-    def slurper = new XmlSlurper(false, true)
-    def BaseElement = slurper.parseText(Data)
-    Author = BaseElement.book.author[0].text()
+    def rootNode = new XmlSlurper(false, false).parseText(Data)
+    String Author = rootNode.book.author[0].text()
 
     ExecutionUtil.setDynamicProcessProperty("Author",Author, false)
 

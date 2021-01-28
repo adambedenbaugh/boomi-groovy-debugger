@@ -6,4 +6,19 @@ public class Logger {
 	{
 		 System.out.println(message);
 	}
+
+	public void warning(String message)
+	{
+		System.out.println(message);
+	}
+
+	public void severe(String message)
+	{
+		System.out.println(message);
+	}
+
+	public void fine(String message)
+	{
+		System.out.println(message);
+	}
 }
