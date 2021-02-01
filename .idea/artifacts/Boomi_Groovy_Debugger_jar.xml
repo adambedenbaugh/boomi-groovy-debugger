@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Boomi Groovy Debugger:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Boomi_Groovy_Debugger_jar</output-path>
+    <root id="archive" name="Boomi Groovy Debugger.jar">
+      <element id="module-output" name="Boomi Groovy Debugger" />
+    </root>
+  </artifact>
+</component>
