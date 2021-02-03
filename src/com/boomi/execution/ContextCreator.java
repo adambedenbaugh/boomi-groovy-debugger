@@ -1,7 +1,9 @@
 package com.boomi.execution;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,10 +14,11 @@ import java.lang.System;
 
 public class ContextCreator {
 
-    private final ArrayList<Properties> _incomingDynamicDocumentProperties;
-    private final ArrayList<InputStream> _incomingStreams;
-    private final ArrayList<InputStream> _resultStreams;
-    private final ArrayList<Properties> _resultDocumentProperties;
+    private ArrayList<Properties> _incomingDynamicDocumentProperties;
+    private ArrayList<InputStream> _incomingStreams;
+    private ArrayList<InputStream> _resultStreams;
+    private ArrayList<Properties> _resultDocumentProperties;
+
     // private boolean consoleOutput = false;
 
     //Default Constructor
@@ -56,15 +59,23 @@ public class ContextCreator {
             Properties prop = new Properties();
             _incomingDynamicDocumentProperties.add(i, prop);
         }
-
-
     }
 
     //creates stream of files
     private void createStream(String path) {
 
         try {
-            InputStream is = new FileInputStream(path);
+            // InputStream is = new FileInputStream(path);
+
+//            InputStream is = new BufferedInputStream(
+//                    new FileInputStream(path),
+//                    1024 * 1024        /* buffer size */
+//            );
+
+            FileInputStream fis = new FileInputStream(path);
+            byte[] bytes = IOUtils.toByteArray(fis);
+            InputStream is = new ByteArrayInputStream(bytes);
+
             _incomingStreams.add(is);
         } catch (Exception ex) {
             System.out.println("Error with createStream()");
@@ -78,30 +89,19 @@ public class ContextCreator {
     }
 
     //Store stream and properties
-    public void storeStream(InputStream stream, Properties props) {
+    public void storeStream(InputStream stream, Properties props) throws IOException {
+
         _resultDocumentProperties.add(props);
         _resultStreams.add(stream);
-
-        /*
- Need to get a ByteArrayInputStream to convert to a String
-		if(consoleOutput){
-			System.out.println("storeStream Output: ");
-			System.out.println(stream.toString());
-		}
-*/
 
     }
 
     //Get stream by it's index
-    public InputStream getStream(int index) {
+    public InputStream getStream(int index) throws IOException {
 
-    	/*
-         Need to finish this to allow for reset() method.
-         is = new ByteArrayInputStream(is.toString().getBytes());
-         is.mark(0);
-        */
+        InputStream is = _incomingStreams.get(index);
+        return is;
 
-        return _incomingStreams.get(index);
     }
 
     //Add property Key/Value pairs to the corresponding property
@@ -115,5 +115,6 @@ public class ContextCreator {
     public Properties getProperties(int index) {
 
         return _incomingDynamicDocumentProperties.get(index);
+
     }
 }

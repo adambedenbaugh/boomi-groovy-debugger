@@ -2,7 +2,7 @@
 import com.boomi.execution.ContextCreator
 
 // Place directory for multiple files and file name for single file
-String pathFiles = "${System.getenv("PROJECT_DIR")}/input_files/books.xml"
+String pathFiles = "${System.getenv("PROJECT_DIR")}/input_files/its a csv.csv"
 dataContext = new ContextCreator()
 dataContext.AddFiles(pathFiles)
 ExecutionUtil ExecutionUtil = new ExecutionUtil()
@@ -33,12 +33,20 @@ for (int i = 0; i < dataContext.getDataCount(); i++) {
     InputStream is = dataContext.getStream(i)
     Properties props = dataContext.getProperties(i)
 
-    String Data = is.getText()
+    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 
-    def rootNode = new XmlSlurper(false, false).parseText(Data)
-    String Author = rootNode.book.author[0].text()
+    int lineNum = 0;
 
-    ExecutionUtil.setDynamicProcessProperty("Author", Author, false)
+    while ((line = reader.readLine()) != null) {
+        lineNum++;
+        println line
+    }
 
+    // Set properties
+    props.setProperty("document.dynamic.userdefined.lineCount", lineNum.toString())
+
+    // Reset the InputStream data
+    is.reset()
+    
     dataContext.storeStream(is, props)
 }
