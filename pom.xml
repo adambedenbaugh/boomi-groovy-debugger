@@ -6,7 +6,7 @@
 
     <groupId>tech.adambedenbaugh</groupId>
     <artifactId>boomi-groovy-debugger</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A library that mocks Boomi's Data Process shape classes.
         It is used to write Groovy scripts that will run within a Boomi integration.</description>
